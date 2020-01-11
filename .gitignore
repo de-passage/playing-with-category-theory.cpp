@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# CMake files
+build/
+
+# VS code files
+.vscode
+
+# Vim temporary files 
+*.sw*
