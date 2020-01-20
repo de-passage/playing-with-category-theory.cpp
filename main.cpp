@@ -27,6 +27,9 @@ custom_type<U> category_theory_functor_custom_map(F f,
   return {f(ct.value)};
 }
 
+static_assert(
+    category_theory::functor::has_custom_map_v<custom_type<int>, double(*)(int)>);
+
 int main(int, char **) {
   using namespace category_theory;
 
