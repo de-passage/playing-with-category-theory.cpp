@@ -54,6 +54,9 @@ template <class T, class... Ts>
 constexpr static inline bool is_direct_list_initializable_v =
     is_direct_list_initializable<T, Ts...>::value;
 
+template<class T>
+using disambiguate = T;
+
 }  // namespace category_theory
 
 #endif  // #ifndef CATEGORYTHEORY_UTILS_UTILS_HPP

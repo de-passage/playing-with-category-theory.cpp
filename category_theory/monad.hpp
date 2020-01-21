@@ -1,15 +1,16 @@
-#ifndef CATEGORYTHEORY_FUNCTOR_FILE
-#define CATEGORYTHEORY_FUNCTOR_FILE
+
+#ifndef CATEGORYTHEORY_MONAD_HPP
+#define CATEGORYTHEORY_MONAD_HPP
 
 // Utilities. Comments are here to prevent reordering by automated tools.
 // Order of includes matters for function lookup
-#include "./utils/functor.hpp"
+#include "./utils/monad.hpp"
 
 // STL definitions. Cannot be reached through ADL and therefore MUST be placed
 // before the definition of related constructions
-#include "./stl/functor.hpp"
+//#include "./stl/monad.hpp"
 
 // Constructions, the meat of the subject
-#include "./constructions/functor.hpp"
+#include "./constructions/monad.hpp"
 
-#endif  // #ifndef CATEGORYTHEORY_FUNCTOR_FILE
+#endif  // #ifndef CATEGORYTHEORY_MONAD_HPP

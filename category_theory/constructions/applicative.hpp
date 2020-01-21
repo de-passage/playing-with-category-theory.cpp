@@ -50,7 +50,7 @@ struct pure_t {
   template <
       class T,
       class = std::enable_if_t<!fits_auto_implementation_requirements<A, T>>,
-      class = T>
+      class = disambiguate<T>>
   [[nodiscard]] constexpr A<T> operator()(T&& value) const noexcept {
     static_assert(
         fail<T>,
