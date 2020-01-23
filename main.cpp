@@ -4,8 +4,7 @@
 #include <type_traits>
 #include <vector>
 
-#include "category_theory/constructions/applicative.hpp"
-#include "category_theory/functor.hpp"
+#include "category_theory/category_theory.hpp"
 
 template <class T>
 struct custom_type {
@@ -25,8 +24,8 @@ template <class T>
 custom_type(T)->custom_type<T>;
 
 template <class T, class F, class U = std::result_of_t<F(T)>>
-constexpr custom_type<U> category_theory_functor_custom_map(F f,
-                                                  const custom_type<T>& ct) {
+constexpr custom_type<U> category_theory_functor_custom_map(
+    F f, const custom_type<T>& ct) {
   return {f(ct.value)};
 }
 
@@ -35,54 +34,6 @@ static_assert(category_theory::functor::has_custom_map_v<custom_type<int>,
 
 static_assert(!std::is_convertible_v<custom_type<int>, int>);
 static_assert(!std::is_convertible_v<int, custom_type<int>>);
-
-namespace category_theory {
-template <class T, class U, class = std::void_t<>>
-struct has_custom_to_function : std::false_type {};
-template <class T, class U>
-struct has_custom_to_function<
-    T,
-    U,
-    std::void_t<decltype(category_theory_isomorphism_custom_to(
-        type_t<U>{}, std::declval<T>()))>> : std::true_type {};
-
-template <class T, class U>
-constexpr static inline bool has_custom_to_function_v =
-    has_custom_to_function<T, std::decay_t<U>>::value;
-
-template <class T, class U>
-constexpr static inline bool has_conversion_from_to =
-    std::is_convertible_v<T, U> || has_custom_to_function_v<T, U>;
-
-namespace isomorphism {
-template <class T>
-struct to_t {
-  template <class U, class = std::enable_if_t<has_conversion_from_to<T, U>>>
-  constexpr T operator()(U&& from) const noexcept {
-    if constexpr (has_custom_to_function_v<T, U>) {
-      return category_theory_isomorphism_custom_to(type_t<T>{},
-                                                   std::forward<U>(from));
-    }
-    else {
-      return from;
-    }
-  }
-};
-}  // namespace isomorphism
-
-template <class T>
-constexpr static inline auto to = isomorphism::to_t<T>{};
-
-template <class T, class U>
-constexpr static inline bool is_isomorphic =
-    has_conversion_from_to<T, U>&& has_conversion_from_to<U, T>;
-
-template <class T, class = std::enable_if_t<is_isomorphic<int, T>>>
-constexpr bool operator<(const T& left, const T& right) noexcept {
-  return to<int>(left) < to<int>(right);
-}
-
-}  // namespace category_theory
 
 constexpr int category_theory_isomorphism_custom_to(
     category_theory::type_t<int>, custom_type<int> c) {

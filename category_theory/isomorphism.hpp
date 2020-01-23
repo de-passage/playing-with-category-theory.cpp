@@ -1,0 +1,6 @@
+#ifndef CATEGORY_THEORY_ISOMORPHISM_HPP
+#define CATEGORY_THEORY_ISOMORPHISM_HPP
+
+#include "constructions/isomorphism.hpp"
+
+#endif // CATEGORY_THEORY_ISOMORPHISM_HPP
