@@ -24,10 +24,11 @@ constexpr static inline bool has_custom_map_v = has_custom_map<F, Fun>::value;
 struct map_t {
   template <class Fun,
             class F,
-            class T = functor_value_t<F>,
+            class G = std::decay_t<F>,
+            class T = functor_value_t<G>,
             class U = std::result_of_t<Fun(T)>,
             class = std::enable_if_t<has_custom_map_v<F, Fun>>>
-  [[nodiscard]] constexpr make_functor_t<F, U> operator()(Fun &&f, F &&g) const
+  [[nodiscard]] constexpr make_functor_t<G, U> operator()(Fun &&f, F &&g) const
       noexcept {
     return category_theory_functor_custom_map(std::forward<Fun>(f),
                                               std::forward<F>(g));
