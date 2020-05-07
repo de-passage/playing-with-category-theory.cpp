@@ -13,6 +13,7 @@ set(HEADER_FILES
     ${INCLUDE_DIRECTORY}/applicative.hpp 
     ${INCLUDE_DIRECTORY}/functor.hpp 
     ${INCLUDE_DIRECTORY}/monad.hpp 
+    ${INCLUDE_DIRECTORY}/isomorphism.hpp 
     ${UTILITY_INCLUDE_DIRECTORY}/functor.hpp 
     ${UTILITY_INCLUDE_DIRECTORY}/monad.hpp 
     ${UTILITY_INCLUDE_DIRECTORY}/utils.hpp 
@@ -21,17 +22,12 @@ set(HEADER_FILES
     ${CONSTRUCTIONS_INCLUDE_DIRECTORY}/monad.hpp 
     ${STLADAPTERS_INCLUDE_DIRECTORY}/functor.hpp)
 
-add_executable(category_theory main.cpp ${HEADER_FILES})
-target_include_directories(category_theory PRIVATE ${INCLUDE_DIRECTORY})
-
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 include(CPack)
-
-if(MSVC)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
-endif(MSVC)
 
 ###############
 # Google Test #
@@ -70,6 +66,12 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
 endif()
 
 # Now simply link against gtest or gtest_main as needed. Eg
-add_executable(isomorphisms tests/isomorphisms.cpp)
-target_link_libraries(isomorphisms gtest_main)
-add_test(NAME isomorphism_test COMMAND isomorphisms)
+add_executable(tests tests/isomorphisms.cpp)
+target_link_libraries(tests gtest_main)
+target_include_directories(tests PUBLIC .)
+add_test(NAME gtests COMMAND tests)
+
+if(MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
+  target_compile_options(tests PRIVATE /W3 /WX)
+endif(MSVC)
